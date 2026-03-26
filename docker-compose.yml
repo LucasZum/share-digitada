@@ -1,0 +1,16 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        # NEXT_PUBLIC_* são embutidas no bundle JS durante o build.
+        # Passe via shell: export $(cat .env.local | grep -v '#' | xargs) && docker compose build
+        # OU use: make build (se tiver o Makefile)
+        NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:-}
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.local
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
